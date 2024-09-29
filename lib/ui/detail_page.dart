@@ -48,40 +48,45 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        widget.restaurant.name,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.overline,
-                          decorationColor: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: Theme.of(context).colorScheme.secondary,
+                      Expanded(
+                        flex: 5,
+                        child: Text(
+                          widget.restaurant.name,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.star,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
                               color: Theme.of(context).colorScheme.secondary,
-                              size: 16,
                             ),
-                            Text(
-                              widget.restaurant.rating.toString(),
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          ],
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.star,
+                                color: Theme.of(context).colorScheme.secondary,
+                                size: 16,
+                              ),
+                              Text(
+                                widget.restaurant.rating.toString(),
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Icon(
