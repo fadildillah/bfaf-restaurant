@@ -1,6 +1,9 @@
-import 'package:bfaf_submisi_restaurant_app/data/model/restaurant.dart';
-import 'package:bfaf_submisi_restaurant_app/ui/detail_page.dart';
+import 'package:bfaf_submisi_restaurant_app/data/model/restaurant_list.dart';
+import 'package:bfaf_submisi_restaurant_app/provider/restaurant_provider.dart';
+import 'package:bfaf_submisi_restaurant_app/styles.dart';
+import 'package:bfaf_submisi_restaurant_app/ui/restaurant_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RestaurantList extends StatelessWidget {
   const RestaurantList({super.key});
@@ -10,68 +13,81 @@ class RestaurantList extends StatelessWidget {
     return _buildSliverList(context);
   }
 
-  FutureBuilder<String> _buildSliverList(BuildContext context) {
-    return FutureBuilder<String>(
-      future: DefaultAssetBundle.of(context).loadString('assets/local_restaurant.json'),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data != null) {
-            final List<RestaurantElement> restaurants = restaurantFromJson(snapshot.data!).restaurants;
-            return CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  pinned: true,
-                  expandedHeight: 100.0,
-                  flexibleSpace:  FlexibleSpaceBar(
-                    title: Text("Restaurants", style: TextStyle(color: Theme.of(context).colorScheme.primary)),
-                    titlePadding: const EdgeInsets.all(16.0),
+  Widget _buildSliverList(BuildContext context) {
+    return Consumer<RestaurantProvider>(
+      builder: (context, state, _) {
+        if (state.state == ResultState.loading) {
+          return const Center(
+            child: CircularProgressIndicator(color: secondaryColor),
+          );
+        } else if (state.state == ResultState.hasData) {
+          final List<RestaurantListSummary> restaurants = state.result.restaurants;
+          return CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                pinned: true,
+                expandedHeight: 100.0,
+                flexibleSpace:  FlexibleSpaceBar(
+                  title: Text("Restaurants", style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+                  titlePadding: const EdgeInsets.all(16.0),
+                ),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(16),
                   ),
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(16),
+                ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.search,
+                      color: primaryColor,
                     ),
-                  ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return _buildRestaurantItem(context, restaurants[index]);
+                    onPressed: () {
                     },
-                    childCount: restaurants.length,
                   ),
+                ],
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return _buildRestaurantItem(context, restaurants[index]);
+                  },
+                  childCount: restaurants.length,
                 ),
-              ],
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        } else if (snapshot.hasError) {
+              ),
+            ],
+          );
+        } else if (state.state == ResultState.noData) {
+          return const Center(
+            child: Text('No data'),
+          );
+        } else if (state.state == ResultState.error) {
           return Center(
-            child: Text('Error: ${snapshot.error}'),
+            child: Text(state.message),
           );
         } else {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: secondaryColor),
           );
         }
-      },
+      }
     );
   }
 
-  Widget _buildRestaurantItem(BuildContext context, RestaurantElement restaurant) {
+  Widget _buildRestaurantItem(BuildContext context, RestaurantListSummary restaurant) {
+    final String pictureId = restaurant.pictureId;
+    final String imageUrl = 'https://restaurant-api.dicoding.dev/images/small/$pictureId';
     return Card(
       borderOnForeground: true,
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: Hero(
-          tag: restaurant.pictureId,
+          tag: imageUrl,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: Image.network(
-              restaurant.pictureId,
+              imageUrl,
               fit: BoxFit.cover,
               width: 100,
             ),
@@ -122,7 +138,7 @@ class RestaurantList extends StatelessWidget {
           Navigator.pushNamed(
             context,
             RestaurantDetailPage.routeName,
-            arguments: restaurant,
+            arguments: restaurant.id,
           );
         },
       ),
