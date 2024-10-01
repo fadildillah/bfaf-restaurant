@@ -21,7 +21,7 @@ class RestaurantProvider extends ChangeNotifier {
 
   String get message => _message;
   RestaurantList get result => _restaurantList!;
-  RestaurantList get searchResult => _searchRestaurant!;
+  RestaurantList? get searchResult => _searchRestaurant;
   RestaurantDetail get detailResult => _restaurantDetail!;
   ResultState get state => _state;
 
@@ -45,26 +45,30 @@ class RestaurantProvider extends ChangeNotifier {
     }
   }
 
-  Future<dynamic> fetchSearchRestaurant(String query) async {
-    // Trigger search externally with the query
+  Future<void> fetchSearchRestaurant(String query) async {
+    if (query.isEmpty) return; // Early return if query is empty
+
+    _state = ResultState.loading; // Set state to loading
+    notifyListeners(); // Notify listeners about the state change
+
     try {
-      _state = ResultState.loading;
-      notifyListeners();
-      final restaurant = await apiService.fetchSearchRestaurant(query);
-      if (restaurant.restaurants.isEmpty) {
-        _state = ResultState.noData;
+      final restaurantList = await apiService.fetchSearchRestaurant(query); // Fetch results from API
+      if (restaurantList.restaurants.isEmpty) {
+        _state = ResultState.noData; // Update state if no data found
+        _searchRestaurant = restaurantList; // Save the empty list
         _message = 'No restaurants found';
       } else {
-        _state = ResultState.hasData;
-        _searchRestaurant = restaurant;
+        _state = ResultState.hasData; // Update state to has data
+        _searchRestaurant = restaurantList; // Save the search results
       }
-      notifyListeners();
     } catch (e) {
-      _state = ResultState.error;
-      _message = 'Error $e';
-      notifyListeners();
+      _state = ResultState.error; // Update state to error if an exception is thrown
+      _message = 'Error: $e';
     }
+
+    notifyListeners(); // Notify listeners about the state change
   }
+
 
   Future<dynamic> fetchRestaurantDetail(String id) async {
     // Trigger detail fetching externally with the ID

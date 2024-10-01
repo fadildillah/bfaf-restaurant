@@ -2,6 +2,7 @@ import 'package:bfaf_submisi_restaurant_app/data/model/restaurant_list.dart';
 import 'package:bfaf_submisi_restaurant_app/provider/restaurant_provider.dart';
 import 'package:bfaf_submisi_restaurant_app/styles.dart';
 import 'package:bfaf_submisi_restaurant_app/ui/restaurant_detail.dart';
+import 'package:bfaf_submisi_restaurant_app/ui/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,6 +45,7 @@ class RestaurantList extends StatelessWidget {
                       color: primaryColor,
                     ),
                     onPressed: () {
+                      Navigator.pushNamed(context, SearchPage.routeName);
                     },
                   ),
                 ],
@@ -76,7 +78,7 @@ class RestaurantList extends StatelessWidget {
   }
 
   Widget _buildRestaurantItem(BuildContext context, RestaurantListSummary restaurant) {
-    final String pictureId = restaurant.pictureId;
+    final String? pictureId = restaurant.pictureId;
     final String imageUrl = 'https://restaurant-api.dicoding.dev/images/small/$pictureId';
     return Card(
       borderOnForeground: true,

@@ -1,4 +1,3 @@
-import 'package:bfaf_submisi_restaurant_app/data/model/restaurant_detail.dart';
 import 'package:bfaf_submisi_restaurant_app/provider/restaurant_provider.dart';
 import 'package:bfaf_submisi_restaurant_app/styles.dart';
 import 'package:flutter/material.dart';
