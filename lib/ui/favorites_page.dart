@@ -1,3 +1,4 @@
+import 'package:bfaf_submisi_restaurant_app/navigation.dart';
 import 'package:bfaf_submisi_restaurant_app/provider/database_provider.dart';
 import 'package:bfaf_submisi_restaurant_app/provider/restaurant_provider.dart';
 import 'package:bfaf_submisi_restaurant_app/ui/restaurant_detail.dart';
@@ -85,7 +86,7 @@ class FavoritesPage extends StatelessWidget {
                             },
                           ),
                           onTap: () {
-                            Navigator.pushNamed(context, RestaurantDetailPage.routeName, arguments: favorite.id);
+                            Navigation.intentWithData(RestaurantDetailPage.routeName, favorite.id);
                           },
                         ),
                       );

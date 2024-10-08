@@ -1,3 +1,4 @@
+import 'package:bfaf_submisi_restaurant_app/data/model/restaurant_detail.dart';
 import 'package:bfaf_submisi_restaurant_app/data/model/restaurant_list.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -45,6 +46,11 @@ class DatabaseHelper {
   }
 
   Future<void> insertFavorite(RestaurantListSummary restaurant) async {
+    final db = await database;
+    await db!.insert(_tblFavorite, restaurant.toJson());
+  }
+
+  Future<void> insertFavoriteFromDetail(RestaurantDetailSummary restaurant) async {
     final db = await database;
     await db!.insert(_tblFavorite, restaurant.toJson());
   }

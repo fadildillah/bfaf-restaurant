@@ -1,4 +1,5 @@
 import 'package:bfaf_submisi_restaurant_app/data/model/restaurant_list.dart';
+import 'package:bfaf_submisi_restaurant_app/navigation.dart';
 import 'package:bfaf_submisi_restaurant_app/provider/database_provider.dart';
 import 'package:bfaf_submisi_restaurant_app/provider/restaurant_provider.dart';
 import 'package:bfaf_submisi_restaurant_app/styles.dart';
@@ -143,11 +144,7 @@ class RestaurantList extends StatelessWidget {
                     ],
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      RestaurantDetailPage.routeName,
-                      arguments: restaurant.id,
-                    );
+                    Navigation.intentWithData(RestaurantDetailPage.routeName, restaurant.id);
                   },
                 ),
               ),

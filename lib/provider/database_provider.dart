@@ -1,4 +1,5 @@
 import 'package:bfaf_submisi_restaurant_app/data/db/database_helper.dart';
+import 'package:bfaf_submisi_restaurant_app/data/model/restaurant_detail.dart';
 import 'package:bfaf_submisi_restaurant_app/data/model/restaurant_list.dart';
 import 'package:bfaf_submisi_restaurant_app/provider/restaurant_provider.dart';
 import 'package:flutter/foundation.dart';
@@ -40,6 +41,7 @@ class DatabaseProvider extends ChangeNotifier{
       notifyListeners();
     }
   }
+  
 
   Future<bool> isFavorite(String id) async {
     final favorite = await databaseHelper.getFavoriteById(id);
@@ -49,6 +51,18 @@ class DatabaseProvider extends ChangeNotifier{
   void removeFavorite(String id) async {
     try {
       await databaseHelper.removeFavorite(id);
+      _getFavorites();
+      notifyListeners();
+    } catch (e) {
+      _state = ResultState.error;
+      _message = 'Error: $e';
+      notifyListeners();
+    }
+  }
+
+  void addFavoriteFromDetail(RestaurantDetailSummary restaurant) async {
+    try {
+      await databaseHelper.insertFavoriteFromDetail(restaurant);
       _getFavorites();
       notifyListeners();
     } catch (e) {

@@ -1,3 +1,4 @@
+import 'package:bfaf_submisi_restaurant_app/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bfaf_submisi_restaurant_app/provider/restaurant_provider.dart';
@@ -77,7 +78,7 @@ class _SearchPageState extends State<SearchPage> {
       title: Text(restaurant.name),
       subtitle: Text(restaurant.city),
       onTap: () {
-        Navigator.pushNamed(context, RestaurantDetailPage.routeName, arguments: restaurant.id);
+        Navigation.intentWithData(RestaurantDetailPage.routeName, restaurant.id);
       },
     );
   }
