@@ -1,4 +1,5 @@
 import 'package:bfaf_submisi_restaurant_app/data/model/restaurant_list.dart';
+import 'package:bfaf_submisi_restaurant_app/provider/database_provider.dart';
 import 'package:bfaf_submisi_restaurant_app/provider/restaurant_provider.dart';
 import 'package:bfaf_submisi_restaurant_app/styles.dart';
 import 'package:bfaf_submisi_restaurant_app/ui/restaurant_detail.dart';
@@ -80,70 +81,81 @@ class RestaurantList extends StatelessWidget {
   Widget _buildRestaurantItem(BuildContext context, RestaurantListSummary restaurant) {
     final String? pictureId = restaurant.pictureId;
     final String imageUrl = 'https://restaurant-api.dicoding.dev/images/small/$pictureId';
-    return Card(
-      borderOnForeground: true,
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: Hero(
-          tag: imageUrl,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              width: 100,
-            ),
-          ),
-        ),
-        title: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              restaurant.name,
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.secondary,
+    return Consumer<DatabaseProvider>(
+      builder: (context, provider, child) {
+        return FutureBuilder<bool>(
+          future: provider.isFavorite(restaurant.id),
+          builder: (context, snapshot) {
+            var isFavorite = snapshot.data ?? false;
+            return Material(
+              child: Card(
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  trailing: isFavorite
+                        ? IconButton(
+                          onPressed: () => provider.removeFavorite(restaurant.id),
+                          icon: Icon(Icons.favorite, color: Theme.of(context).colorScheme.secondary),
+                        )
+                        : IconButton(
+                          onPressed: () => provider.addFavorite(restaurant),
+                          icon: Icon(Icons.favorite_border, color: Theme.of(context).colorScheme.secondary),
+                        ),
+                  leading: Hero(
+                    tag: imageUrl,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        width: 100,
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                        restaurant.name,
+                        style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.location_on, color: Theme.of(context).colorScheme.secondary, size: 14),
+                          Text(
+                            restaurant.city,
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 16,
+                          ),
+                          Text(
+                            restaurant.rating.toString(),
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RestaurantDetailPage.routeName,
+                      arguments: restaurant.id,
+                    );
+                  },
                 ),
               ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.star,
-                    color: Theme.of(context).colorScheme.secondary,
-                    size: 16,
-                  ),
-                  Text(
-                    restaurant.rating.toString(),
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        subtitle: Row(
-          children: [
-            Icon(Icons.location_on, color: Theme.of(context).colorScheme.secondary, size: 14),
-            Text(
-              restaurant.city,
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-          ],
-        ),
-        onTap: () {
-          Navigator.pushNamed(
-            context,
-            RestaurantDetailPage.routeName,
-            arguments: restaurant.id,
-          );
-        },
-      ),
+            );
+          },
+        );
+      },
     );
+
   }
 }

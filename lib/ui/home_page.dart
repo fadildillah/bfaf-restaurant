@@ -1,5 +1,6 @@
-import 'package:bfaf_submisi_restaurant_app/ui/about_page.dart';
+import 'package:bfaf_submisi_restaurant_app/ui/favorites_page.dart';
 import 'package:bfaf_submisi_restaurant_app/ui/restaurant_list.dart';
+import 'package:bfaf_submisi_restaurant_app/ui/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,9 +27,13 @@ class _HomePageState extends State<HomePage> {
             label: 'Restaurants',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.info),
-            label: 'About',
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          )
         ],
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -42,6 +47,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const RestaurantList(),
-    const AboutPage(),
+    const FavoritesPage(),
+    const SettingsPage(),
   ];
 }

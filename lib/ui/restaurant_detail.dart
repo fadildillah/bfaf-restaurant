@@ -19,12 +19,15 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
   late Future<void> _restaurantDetailFuture;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     restaurantId = ModalRoute.of(context)!.settings.arguments as String;
-
-    _restaurantDetailFuture = Provider.of<RestaurantProvider>(context, listen: false)
-        .fetchRestaurantDetail(restaurantId);
+    _restaurantDetailFuture = Provider.of<RestaurantProvider>(context, listen: false).fetchRestaurantDetail(restaurantId);
   }
 
   void _toggleExpand() {

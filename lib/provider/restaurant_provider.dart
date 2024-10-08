@@ -74,7 +74,6 @@ class RestaurantProvider extends ChangeNotifier {
     // Trigger detail fetching externally with the ID
     try {
       _state = ResultState.loading;
-      notifyListeners();
       final restaurant = await apiService.fetchRestaurantDetail(id);
       _state = ResultState.hasData;
       _restaurantDetail = restaurant;

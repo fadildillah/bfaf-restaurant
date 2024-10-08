@@ -1,6 +1,6 @@
 name: bfaf_submisi_restaurant_app
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -10,11 +10,14 @@ dependencies:
   animation_list: ^3.0.0
   flutter:
     sdk: flutter
+  flutter_local_notifications: ^17.2.3
   google_fonts: ^6.2.1
   http: ^1.2.2
   intl: ^0.19.0
   provider: ^6.1.2
   rxdart: ^0.28.0
+  shared_preferences: ^2.3.2
+  sqflite: ^2.4.0
 
 dev_dependencies:
   flutter_lints: ^4.0.0

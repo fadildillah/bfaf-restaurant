@@ -23,6 +23,13 @@ class RestaurantList {
           ? List<RestaurantListSummary>.from(json['restaurants'].map((x) => RestaurantListSummary.fromJson(x)))
           : [], // Return an empty list if restaurants are null
   );
+
+  Map<String, dynamic> toJson() => {
+    "error": error,
+    "message": message,
+    "founded": founded,
+    "restaurants": List<dynamic>.from(restaurants.map((x) => x.toJson())),
+  };
 }
 
 class RestaurantListSummary {
@@ -52,4 +59,13 @@ class RestaurantListSummary {
       rating: json["rating"]?.toDouble() ?? 0.0, // Default to 0.0 if null
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "description": description,
+    "pictureId": pictureId,
+    "city": city,
+    "rating": rating,
+  };
 }
