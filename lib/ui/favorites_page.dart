@@ -39,17 +39,6 @@ class FavoritesPage extends StatelessWidget {
                       bottom: Radius.circular(16),
                     ),
                   ),
-                  actions: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.search,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, SearchPage.routeName);
-                      },
-                    ),
-                  ],
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -58,9 +47,13 @@ class FavoritesPage extends StatelessWidget {
                       final imgUrl = 'https://restaurant-api.dicoding.dev/images/small/${favorite.pictureId}';
                       return Card(
                         child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           leading: Hero(
                             tag: imgUrl, 
-                            child: Image.network(imgUrl, width: 100, fit: BoxFit.cover),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(imgUrl, width: 100, fit: BoxFit.cover)
+                            ),
                           ),
                           title: Text(favorite.name, style: Theme.of(context).textTheme.bodyMedium),
                           subtitle: Column(
@@ -68,13 +61,13 @@ class FavoritesPage extends StatelessWidget {
                               Row(
                                 children: [
                                   Icon(Icons.location_on, size: 16, color: Theme.of(context).colorScheme.secondary),
-                                  Text(favorite.city, style: Theme.of(context).textTheme.bodySmall),
+                                  Text(favorite.city, style: Theme.of(context).textTheme.labelMedium),
                                 ],
                               ),
                               Row(
                                 children: [
                                   Icon(Icons.star, size: 16, color: Theme.of(context).colorScheme.secondary),
-                                  Text(favorite.rating.toString(), style: Theme.of(context).textTheme.bodySmall),
+                                  Text(favorite.rating.toString(), style: Theme.of(context).textTheme.labelMedium),
                                 ],
                               )
                             ],

@@ -1,4 +1,5 @@
 import 'package:bfaf_submisi_restaurant_app/navigation.dart';
+import 'package:bfaf_submisi_restaurant_app/provider/database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bfaf_submisi_restaurant_app/provider/restaurant_provider.dart';
@@ -74,12 +75,79 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildSearchItem(BuildContext context, RestaurantListSummary restaurant) {
-    return ListTile(
-      title: Text(restaurant.name),
-      subtitle: Text(restaurant.city),
-      onTap: () {
-        Navigation.intentWithData(RestaurantDetailPage.routeName, restaurant.id);
-      },
+    final String? pictureId = restaurant.pictureId;
+    final String imageUrl = 'https://restaurant-api.dicoding.dev/images/small/$pictureId';
+
+    return Consumer<DatabaseProvider>(
+      builder: (context, provider, child) {
+        return FutureBuilder<bool>(
+          future: provider.isFavorite(restaurant.id), 
+          builder: (context, snapshot) {
+            var isFavorite = snapshot.data ?? false;
+            return Material(
+              child: Card(
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  trailing: isFavorite
+                        ? IconButton(
+                          onPressed: () => provider.removeFavorite(restaurant.id),
+                          icon: Icon(Icons.favorite, color: Theme.of(context).colorScheme.secondary),
+                        )
+                        : IconButton(
+                          onPressed: () => provider.addFavorite(restaurant),
+                          icon: Icon(Icons.favorite_border, color: Theme.of(context).colorScheme.secondary),
+                        ),
+                  leading: Hero(
+                    tag: imageUrl,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        width: 100,
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                        restaurant.name,
+                        style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.location_on, color: Theme.of(context).colorScheme.secondary, size: 14),
+                          Text(
+                            restaurant.city,
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 16,
+                          ),
+                          Text(
+                            restaurant.rating.toString(),
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigation.intentWithData(RestaurantDetailPage.routeName, restaurant.id);
+                  },
+                ),
+              ),
+            );
+          }
+        );
+      }
     );
   }
 }
