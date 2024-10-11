@@ -31,8 +31,11 @@ This project covers various fundamental topics of Flutter development:
 
 ## Screenshots
 
-<img src="https://i.allthepics.net/2024/10/11/flutter_01.png" alt="Main Screen" width="200"/>
-<img src="https://i.allthepics.net/2024/10/11/flutter_03.jpeg" alt="Details Screen" width="200"/>
-<img src="https://i.allthepics.net/2024/10/11/flutter_02.md.png" alt="Favorites Screen" width="200"/>
-<img src="https://i.allthepics.net/2024/10/11/flutter_04.png" alt="Search Screen" width="200"/>
-<img src="https://i.allthepics.net/2024/10/11/flutter_05.png" alt="Notification Feature" width="200"/>
+<div style="display: flex; gap: 10px;">
+  <img src="https://i.allthepics.net/2024/10/11/flutter_01.png" alt="Main Screen" width="200"/>
+  <img src="https://i.allthepics.net/2024/10/11/flutter_03.jpeg" alt="Details Screen" width="200"/>
+  <img src="https://i.allthepics.net/2024/10/11/flutter_02.md.png" alt="Favorites Screen" width="200"/>
+  <img src="https://i.allthepics.net/2024/10/11/flutter_04.png" alt="Search Screen" width="200"/>
+  <img src="https://i.allthepics.net/2024/10/11/flutter_05.png" alt="Notification Feature" width="200"/>
+</div>
+
